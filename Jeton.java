@@ -9,7 +9,6 @@ public class Jeton {
     static final int NCASES = 21;
     static final int NLIGNES = 6; 
     static final String[] COULEURS = {"B", "R"};
-   
 
     static boolean estOui(char reponse) {
         return "yYoO".indexOf(reponse) != -1;
@@ -33,21 +32,13 @@ public class Jeton {
             int idCaseJouee;
 
             // Inititalisation des variables
-
             String couleur = "";
             int pos = 0;
-
-            int count = 1;
-            int resultat = 0;
-            int count2 = count + 1;
-            int resultat2 = 0;
             int idLigne = 0;
-
-            
 
             // MODIFIE LE 10 BAKA \\
             for (int i=0 ; i<10 ; i++){
-
+            
                 do {
                 couleur = COULEURS[0];
                 System.out.println("Veuillez entrer la position du jeton Bleu : ");
@@ -55,33 +46,23 @@ public class Jeton {
                 }
                 while (jouer(couleur, val, pos)!=true);
 
+                // -------------------------------- TEST -------------------------------- \\
+                
                 // idLigne TEST \\
-                if (pos == 0){
-                    idLigne=0;
+                getLigne(pos);
+                System.out.println("Ligne : " + getLigne(pos));
 
-                } else if (pos >= 1 && pos < 3){
-                    idLigne=1;
-
-                } else if (pos >= 3 && pos < 6){
-                    idLigne=2;
-
-                } else if (pos >= 6 && pos < 10){
-                    idLigne=3;
-
-                } else if (pos >= 10 && pos < 15){
-                    idLigne=4;
-
-                } else
-                    idLigne=5;
+                idLigne = getLigne(pos);
 
                 // idDebutLigne TEST \\
                 idDebutLigne(idLigne);
                 System.out.println("L'idDebutLigne : " + idDebutLigne(idLigne));
-
                 
                 // idFinLigne TEST \\
                 idFinLigne(idLigne);
                 System.out.println("L'IdFinLigne : " + idFinLigne(idLigne));
+
+                // ---------------------------------------------------------------------- \\
                 
                 afficheJeu(state);
 
@@ -92,33 +73,23 @@ public class Jeton {
                 }
                 while (jouer(couleur, val, pos)!=true);
 
+                // -------------------------------- TEST -------------------------------- \\
+
                 // idLigne TEST \\
-                if (pos == 0){
-                    idLigne=0;
+                getLigne(pos);
+                System.out.println("Ligne : " + getLigne(pos));
 
-                } else if (pos >= 1 && pos < 3){
-                    idLigne=1;
-
-                } else if (pos >= 3 && pos < 6){
-                    idLigne=2;
-
-                } else if (pos >= 6 && pos < 10){
-                    idLigne=3;
-
-                } else if (pos >= 10 && pos < 15){
-                    idLigne=4;
-
-                } else
-                    idLigne=5;
+                idLigne = getLigne(pos);
 
                 // idDebutLigne TEST \\
                 idDebutLigne(idLigne);
                 System.out.println("L'idDebutLigne : " + idDebutLigne(idLigne));
-
                 
                 // idFinLigne TEST \\
                 idFinLigne(idLigne);
                 System.out.println("L'IdFinLigne : " + idFinLigne(idLigne));
+
+                // ---------------------------------------------------------------------- \\
                 
                 afficheJeu(state);
 
@@ -128,7 +99,6 @@ public class Jeton {
 
             System.out.println("la position du jeton manquant : " + getIdVide());
 
-            
             // ---------------------------\\
 
             int sumR = sommeVoisins("R");
@@ -200,13 +170,43 @@ public class Jeton {
     }
 
     /**
+     * Trouve la ligne du jeton joué
+     * @param pos position (indice) de l'emplacement où placer le jeton
+     * @return la ligne du jeton joué
+     */
+    public static int getLigne(int pos){
+        int idLigne = 0;
+
+        if (pos == 0){
+            idLigne=0;
+
+        } else if (pos >= 1 && pos < 3){
+            idLigne=1;
+
+        } else if (pos >= 3 && pos < 6){
+            idLigne=2;
+
+        } else if (pos >= 6 && pos < 10){
+            idLigne=3;
+
+        } else if (pos >= 10 && pos < 15){
+            idLigne=4;
+
+        } else
+            idLigne=5;
+
+        return idLigne;
+    }
+
+    /**
      * Retourne l'indice de la case débutant la ligne idLigne
      * @param idLigne indice de la ligne. La première ligne est la ligne #0.
      * @return l'indice de la case la plus à gauche de la ligne
      */
     public static int idDebutLigne(int idLigne){
-        idLigne = idLigne*(idLigne+1)/2;
-        return idLigne;
+        int indice = idLigne;
+        indice = indice*(indice+1)/2;
+        return indice;
     }
 
     /**
@@ -215,11 +215,11 @@ public class Jeton {
      * @return l'indice de la case la plus à droite de la ligne
      */
     public static int idFinLigne(int idLigne){
-        int length = 0;
-        length = idDebutLigne(idLigne);
-        for ( int i=0; i<length+1; i++)
-            idLigne+=i;
-        return idLigne;
+        int limit = idDebutLigne(idLigne);
+        int indice = idLigne;
+        for ( int i=0; i<limit; i++)
+            indice+=1;
+        return indice;
     }
 
     /**
