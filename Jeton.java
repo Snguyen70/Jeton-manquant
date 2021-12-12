@@ -9,6 +9,7 @@ public class Jeton {
     static final int NCASES = 21;
     static final int NLIGNES = 6; 
     static final String[] COULEURS = {"B", "R"};
+    static final int[] tabIndice = {NCASES};
 
     static boolean estOui(char reponse) {
         return "yYoO".indexOf(reponse) != -1;
@@ -176,7 +177,11 @@ public class Jeton {
      */
     public static int getLigne(int pos){
         int idLigne = 0;
+        int count = 0;
+        int limitInf = 0;
+        int limitSup = 0;
 
+        /*
         if (pos == 0){
             idLigne=0;
 
@@ -194,7 +199,17 @@ public class Jeton {
 
         } else
             idLigne=5;
+        */
 
+        for (int i = 0; i<NLIGNES ; i++){
+            result = count*(count+1)/2;
+            result2 = (count+1)*((count+1)+1)/2;
+            if (pos == 0 || pos >= limitInf && pos < limitSup) {
+                return idLigne;
+            } else
+                idLigne+=1;
+                count++;
+        }
         return idLigne;
     }
 
