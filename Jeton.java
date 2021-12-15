@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by zulupero on 24/09/2021.
@@ -9,7 +10,6 @@ public class Jeton {
     static final int NCASES = 21;
     static final int NLIGNES = 6; 
     static final String[] COULEURS = {"B", "R"};
-    static final int[] tabIndice = {NCASES};
 
     static boolean estOui(char reponse) {
         return "yYoO".indexOf(reponse) != -1;
@@ -32,73 +32,27 @@ public class Jeton {
             int val = 1;
             int idCaseJouee;
 
-            // Inititalisation des variables
-            String couleur = "";
-            int pos = 0;
-            int idLigne = 0;
+            /*
 
-            // MODIFIE LE 10 BAKA \\
-            for (int i=0 ; i<10 ; i++){
-            
+                le code de votre partie ici
+
+            */
+
+            for (int i=0 ; i < NCASES/2 ; i++){
                 do {
-                couleur = COULEURS[0];
                 System.out.println("Veuillez entrer la position du jeton Bleu : ");
-                pos = input.nextInt();
+                idCaseJouee = input.nextInt();
                 }
-                while (jouer(couleur, val, pos)!=true);
-
-                // -------------------------------- TEST -------------------------------- \\
-                
-                // idLigne TEST \\
-                getLigne(pos);
-                System.out.println("Ligne : " + getLigne(pos));
-
-                idLigne = getLigne(pos);
-
-                // idDebutLigne TEST \\
-                idDebutLigne(idLigne);
-                System.out.println("L'idDebutLigne : " + idDebutLigne(idLigne));
-                
-                // idFinLigne TEST \\
-                idFinLigne(idLigne);
-                System.out.println("L'IdFinLigne : " + idFinLigne(idLigne));
-
-                // ---------------------------------------------------------------------- \\
-                
+                while (jouer(COULEURS[0], val, idCaseJouee)!=true);
                 afficheJeu(state);
-
                 do {
-                couleur = COULEURS[1];
                 System.out.println("Veuillez entrer la position du jeton Rouge : ");
-                pos = input.nextInt();
+                idCaseJouee = input.nextInt();
                 }
-                while (jouer(couleur, val, pos)!=true);
-
-                // -------------------------------- TEST -------------------------------- \\
-
-                // idLigne TEST \\
-                getLigne(pos);
-                System.out.println("Ligne : " + getLigne(pos));
-
-                idLigne = getLigne(pos);
-
-                // idDebutLigne TEST \\
-                idDebutLigne(idLigne);
-                System.out.println("L'idDebutLigne : " + idDebutLigne(idLigne));
-                
-                // idFinLigne TEST \\
-                idFinLigne(idLigne);
-                System.out.println("L'IdFinLigne : " + idFinLigne(idLigne));
-
-                // ---------------------------------------------------------------------- \\
-                
+                while (jouer(COULEURS[1], val, idCaseJouee)!=true);
                 afficheJeu(state);
-
                 val++;
-                
             }
-
-            System.out.println("la position du jeton manquant : " + getIdVide());
 
             // ---------------------------\\
 
@@ -142,11 +96,11 @@ public class Jeton {
         int x=0;
 
         for (int i=0; i<NLIGNES; ++i) {
-            System.out.print(x + "\t" + " :");
+            System.out.print(x + "\t" + ":");
             for (int j=0; j<NLIGNES - i; j++) {
                 System.out.print("  ");
             }
-            for (int k=0; k<=i;k++){
+            for (int k=0; k<=i; k++){
                 System.out.print(state[count]+ " ");
                 count=count+1; 
                 x++;
@@ -176,34 +130,14 @@ public class Jeton {
      * @return la ligne du jeton joué
      */
     public static int getLigne(int pos){
-        int idLigne = 0;
+        int idLigne = 1;
         int count = 0;
         int limitInf = 0;
         int limitSup = 0;
 
-        /*
-        if (pos == 0){
-            idLigne=0;
-
-        } else if (pos >= 1 && pos < 3){
-            idLigne=1;
-
-        } else if (pos >= 3 && pos < 6){
-            idLigne=2;
-
-        } else if (pos >= 6 && pos < 10){
-            idLigne=3;
-
-        } else if (pos >= 10 && pos < 15){
-            idLigne=4;
-
-        } else
-            idLigne=5;
-        */
-
         for (int i = 0; i<NLIGNES ; i++){
-            result = count*(count+1)/2;
-            result2 = (count+1)*((count+1)+1)/2;
+            limitInf = count*(count+1)/2;
+            limitSup = (count+1)*((count+1)+1)/2;
             if (pos == 0 || pos >= limitInf && pos < limitSup) {
                 return idLigne;
             } else
@@ -219,7 +153,7 @@ public class Jeton {
      * @return l'indice de la case la plus à gauche de la ligne
      */
     public static int idDebutLigne(int idLigne){
-        int indice = idLigne;
+        int indice = idLigne-1;
         indice = indice*(indice+1)/2;
         return indice;
     }
@@ -231,7 +165,7 @@ public class Jeton {
      */
     public static int idFinLigne(int idLigne){
         int limit = idDebutLigne(idLigne);
-        int indice = idLigne;
+        int indice = idLigne-1;
         for ( int i=0; i<limit; i++)
             indice+=1;
         return indice;
@@ -256,8 +190,109 @@ public class Jeton {
      * @param col couleur des voisins considérés
      * @return somme des poids
      */
+
     public static int sommeVoisins(String col){
-        throw new java.lang.UnsupportedOperationException("à compléter");                
+        List<Integer> tabIdProche = new ArrayList<>();
+        int idVide = getIdVide();
+        int idLigne = getLigne(idVide);
+        int sommeTab = 0;
+        int somme = 0;
+
+        String getVal = "";
+        String val = "";
+        String color;
+
+        if (idVide==0){
+            tabIdProche.add(idVide+idLigne);
+            tabIdProche.add(idVide+(idLigne+1));
+
+        } else if (idLigne==NLIGNES && idVide==idDebutLigne(idLigne)){
+            tabIdProche.add(idVide+1);
+            tabIdProche.add(idVide-(idLigne-1));
+
+        } else if (idLigne==NLIGNES && idVide==idFinLigne(idLigne)){
+            tabIdProche.add(idVide-1);
+            tabIdProche.add(idVide-idLigne);
+        
+        } else if (idLigne==NLIGNES && idVide!=idDebutLigne(idLigne) && idVide!=idFinLigne(idLigne)){
+            tabIdProche.add(idVide-1);
+            tabIdProche.add(idVide+1);
+            tabIdProche.add(idVide-idLigne);
+            tabIdProche.add(idVide-(idLigne-1));
+
+        } else if (idLigne!=NLIGNES && idVide==idDebutLigne(idLigne) && idVide!=idFinLigne(idLigne)){
+            tabIdProche.add(idVide+1);
+            tabIdProche.add(idVide+idLigne);
+            tabIdProche.add(idVide-(idLigne-1));
+            tabIdProche.add(idVide+(idLigne+1));
+
+        } else if ( idLigne!=NLIGNES && idVide!=idDebutLigne(idLigne) && idVide==idFinLigne(idLigne)){
+            tabIdProche.add(idVide-1);
+            tabIdProche.add(idVide-idLigne);
+            tabIdProche.add(idVide+idLigne);
+            tabIdProche.add(idVide+(idLigne+1));
+
+        } else {
+            tabIdProche.add(idVide-1);
+            tabIdProche.add(idVide+1);
+            tabIdProche.add(idVide-idLigne);
+            tabIdProche.add(idVide+idLigne);
+            tabIdProche.add(idVide-(idLigne-1));
+            tabIdProche.add(idVide+(idLigne+1));
+        }
+
+        System.out.println("");
+        System.out.println("sommeVoisins(col : " + col + ")");
+        System.out.println("");
+
+        for(int i=0; i<tabIdProche.size(); i++){
+            getVal = state[tabIdProche.get(i)];
+            val = getVal.substring(1);
+            color = getVal.substring(0,1);
+
+            // System.out.println("Couleur:" + color +"beeboo");
+            // System.out.println("tabIdProche.get(" + i + ") : " + tabIdProche.get(i) + " , val : " + val);
+            // System.out.println("");
+
+            sommeTab = Integer.parseInt(val);
+            // System.out.println("SommeTab : " + sommeTab);
+            // System.out.println("");
+            System.out.println(color);
+            System.out.println(col);
+            System.out.println("Test " + (col == color));
+            if (col == color)
+                somme+=sommeTab;
+        }
+        // System.out.println("========== Somme : " + somme + " ==========");
+        // System.out.println("");
+        return somme;
+
+
+        /*
+        for(int i=0; i<tabIdProche.length; i++){
+            sommeTab = Integer.parseInt(state[tabIdProche[i]].substring(1));
+
+            if (col == COULEURS[1])
+                somme+=sommeTab;
+        }
+        return somme;
+        */
+
+
+        /*
+        for(int i=0; i<tabIdProche.length; i++){
+
+            // System.out.println(tabIdProche[i]);
+
+            tabSplit = state[tabIdProche[i]].split(".");
+            test = tabSplit[1];
+            sommeTab = Integer.parseInt(test);
+
+            if (col == COULEURS[1])
+                somme+=sommeTab;
+        }
+        return somme;
+        */
     }
 
     /**
